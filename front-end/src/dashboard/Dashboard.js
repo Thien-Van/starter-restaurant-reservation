@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationDetail from "./ReservationDetail";
 
 //debug database
 import data from "../database";
@@ -15,7 +16,8 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
-  useEffect(loadDashboard, [date]);
+  useEffect(() => setReservations(data), [date]);
+  // useEffect(loadDashboard, [date]);
 
   // new function to replicate loadDashboard with debug database
   // calls listReservations from utils/api with date as param
@@ -27,7 +29,6 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
-  console.log(date);
 
   // replaced the return statement with one that works with the debug database
   // return (
@@ -41,9 +42,39 @@ function Dashboard({ date }) {
   //   </main>
   // );
 
-  function dateChange() {
-    const today = date;
-  }
+  //need to setup a useEffect/useState for date
+  //sets date to current date -1
+  const handlePrev = (event) => {
+    event.preventDefault();
+    console.log("prev");
+  };
+
+  //sets date back to today
+  const handleToday = (event) => {
+    event.preventDefault();
+    console.log("today");
+  };
+
+  //sets date to current date +1
+  const handleNext = (event) => {
+    event.preventDefault();
+    console.log("next");
+  };
+
+  console.log(reservations);
+  const reservationList = reservations.map((res, index) => (
+    <ReservationDetail
+      firstName={res.first_name}
+      lastName={res.last_name}
+      mobile={res.mobile_number}
+      people={res.people}
+      date={res.reservation_date}
+      time={res.reservation_time}
+      key={res.updated_at + index}
+    />
+  ));
+
+  console.log(reservationList);
 
   return (
     <main>
@@ -52,15 +83,27 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(data())}
-      <div>
-        <button type="button" className="btn btn-secondary">
+      {reservationList}
+      <div className="row gx-3">
+        <button
+          type="button"
+          className="btn btn-secondary col-2"
+          onClick={handlePrev}
+        >
           Previous
         </button>
-        <button type="button" className="btn btn-secondary">
+        <button
+          type="button"
+          className="btn btn-secondary col-2"
+          onClick={handleToday}
+        >
           Today
         </button>
-        <button type="button" className="btn btn-secondary">
+        <button
+          type="button"
+          className="btn btn-secondary col-2"
+          onClick={handleNext}
+        >
           Next
         </button>
       </div>

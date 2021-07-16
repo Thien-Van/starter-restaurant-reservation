@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationDetail from "./ReservationDetail";
+import { next, previous } from "../utils/date-time";
 
 //debug database
 import data from "../database";
@@ -15,7 +16,9 @@ import data from "../database";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  // const [currentDate, setCurrentDate] = useState(null);
 
+  // useEffect(() => setCurrentDate(date), []);
   useEffect(() => setReservations(data), [date]);
   // useEffect(loadDashboard, [date]);
 
@@ -44,9 +47,14 @@ function Dashboard({ date }) {
 
   //need to setup a useEffect/useState for date
   //sets date to current date -1
-  const handlePrev = (event) => {
+  const handlePrev = (direction = "today", event) => {
+    console.log(direction);
     event.preventDefault();
     console.log("prev");
+    console.log(date);
+    date = previous(date);
+    console.log(date);
+    console.log(previous(date));
   };
 
   //sets date back to today
@@ -88,7 +96,7 @@ function Dashboard({ date }) {
         <button
           type="button"
           className="btn btn-secondary col-2"
-          onClick={handlePrev}
+          onClick={handlePrev("prev")}
         >
           Previous
         </button>

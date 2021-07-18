@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationDetail from "./ReservationDetail";
-import { next, previous } from "../utils/date-time";
+import { next, previous, today } from "../utils/date-time";
 
 //debug database
 import data from "../database";
@@ -16,10 +16,12 @@ import data from "../database";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  // const [currentDate, setCurrentDate] = useState(null);
+  const [currentDate, setCurrentDate] = useState(null);
 
-  // useEffect(() => setCurrentDate(date), []);
-  useEffect(() => setReservations(data), [date]);
+  useEffect(() => setCurrentDate(date), []);
+  useEffect(() => setReservations(data), [currentDate]);
+  console.log("top", currentDate);
+
   // useEffect(loadDashboard, [date]);
 
   // new function to replicate loadDashboard with debug database
@@ -47,29 +49,22 @@ function Dashboard({ date }) {
 
   //need to setup a useEffect/useState for date
   //sets date to current date -1
-  const handlePrev = (direction = "today", event) => {
-    console.log(direction);
+  const handlePrev = (event) => {
     event.preventDefault();
-    console.log("prev");
-    console.log(date);
-    date = previous(date);
-    console.log(date);
-    console.log(previous(date));
+    console.log(currentDate);
+    setCurrentDate(previous(currentDate));
   };
 
-  //sets date back to today
   const handleToday = (event) => {
     event.preventDefault();
-    console.log("today");
+    setCurrentDate(today());
   };
 
-  //sets date to current date +1
   const handleNext = (event) => {
     event.preventDefault();
-    console.log("next");
+    setCurrentDate(next(currentDate));
   };
 
-  console.log(reservations);
   const reservationList = reservations.map((res, index) => (
     <ReservationDetail
       firstName={res.first_name}
@@ -81,8 +76,6 @@ function Dashboard({ date }) {
       key={res.updated_at + index}
     />
   ));
-
-  console.log(reservationList);
 
   return (
     <main>
@@ -96,7 +89,7 @@ function Dashboard({ date }) {
         <button
           type="button"
           className="btn btn-secondary col-2"
-          onClick={handlePrev("prev")}
+          onClick={handlePrev}
         >
           Previous
         </button>

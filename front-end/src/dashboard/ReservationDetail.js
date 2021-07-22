@@ -1,6 +1,5 @@
 // component to style the reservation entries
-import React, { useEffect, useState } from "react";
-import data from "../database";
+import React from "react";
 
 function ReservationDetail({
   firstName,
@@ -12,12 +11,12 @@ function ReservationDetail({
 }) {
   return (
     <div className="row g-3 mb-4">
-      <a className="col-2">{firstName}</a>
-      <a className="col-2">{lastName}</a>
-      <a className="col-3">{mobile}</a>
-      <a className="col-1">{people}</a>
-      <a className="col-2">{date}</a>
-      <a className="col-2">{time}</a>
+      <p className="col-2">{firstName}</p>
+      <p className="col-2">{lastName}</p>
+      <p className="col-3">{mobile}</p>
+      <p className="col-1">{people}</p>
+      <p className="col-2">{date}</p>
+      <p className="col-2">{time}</p>
     </div>
   );
 }

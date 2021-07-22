@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationDetail from "./ReservationDetail";
-import { next, previous, today } from "../utils/date-time";
+import { formatAsDate, next, previous, today } from "../utils/date-time";
 
 //debug database
-import data from "../database";
+// import data from "../database";
 
 /**
  * Defines the dashboard page.
@@ -17,21 +17,26 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
+  const testdate = formatAsDate("2020-12-30");
 
-  useEffect(() => setCurrentDate(date), []);
-  useEffect(() => setReservations(data), [currentDate]);
+  useEffect(() => setCurrentDate(testdate), [testdate]);
+  // useEffect(() => setReservations(data), [currentDate]);
   console.log("top", currentDate);
 
-  // useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [currentDate, testdate]);
 
   // new function to replicate loadDashboard with debug database
   // calls listReservations from utils/api with date as param
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
+    if (currentDate) {
+      console.log("ifCurrentDate");
+      listReservations({ currentDate }, abortController.signal)
+        // .then(console.log)
+        .then(setReservations)
+        .catch(setReservationsError);
+    }
     return () => abortController.abort();
   }
 

@@ -62,11 +62,16 @@ async function fetchJson(url, options, onCancel) {
 // still needs the param from the route somehow
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
-  console.log(url);
+  try {
+    Object.entries(params).forEach(([key, value]) =>
+      url.searchParams.append(key, value.toString())
+    );
+  } catch (error) {
+    console.log(error, params);
+  }
   return await fetchJson(url, { headers, signal }, [])
+    // .then(console.log)
     .then(formatReservationDate)
     .then(formatReservationTime);
+  // .then(console.log);
 }

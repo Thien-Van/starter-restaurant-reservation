@@ -4,7 +4,7 @@ function CreateReservation() {
   return (
     <form className="row g-3">
       <div className="col-md-6">
-        <label for="first_name" className="form-label">
+        <label htmlFor="first_name" className="form-label">
           First name
         </label>
         <input
@@ -16,7 +16,7 @@ function CreateReservation() {
         ></input>
       </div>
       <div className="col-md-6">
-        <label for="last_name" className="form-label">
+        <label htmlFor="last_name" className="form-label">
           Last name
         </label>
         <input
@@ -28,7 +28,7 @@ function CreateReservation() {
         ></input>
       </div>
       <div className="col-12">
-        <label for="mobile_number" className="form-label">
+        <label htmlFor="mobile_number" className="form-label">
           Mobile number
         </label>
         <input
@@ -40,7 +40,7 @@ function CreateReservation() {
         ></input>
       </div>
       <div className="col-12">
-        <label for="reservation_date" className="form-label">
+        <label htmlFor="reservation_date" className="form-label">
           Reservation date
         </label>
         <input
@@ -52,7 +52,7 @@ function CreateReservation() {
         ></input>
       </div>
       <div className="col-12">
-        <label for="reservation_time" className="form-label">
+        <label htmlFor="reservation_time" className="form-label">
           Reservation time
         </label>
         <input
@@ -64,7 +64,7 @@ function CreateReservation() {
         ></input>
       </div>
       <div className="col-12">
-        <label for="people" className="form-label">
+        <label htmlFor="people" className="form-label">
           People in party
         </label>
         <input
@@ -76,12 +76,12 @@ function CreateReservation() {
         ></input>
       </div>
       <div className="col-2">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" className="btn btn-primary">
           Submit
         </button>
       </div>
       <div className="col-2">
-        <button type="cancel" class="btn btn-secondary">
+        <button type="cancel" className="btn btn-secondary">
           Cancel
         </button>
       </div>

@@ -38,7 +38,7 @@ function ReservationForm({
         errorHandler(err);
       }
       if (resDate < today()) {
-        const err = new Error("Can't select a date in the past.");
+        const err = new Error("Unable to select a date in the past.");
         errorHandler(err);
       }
       console.log(resDate, today());

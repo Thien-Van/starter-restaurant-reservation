@@ -37,7 +37,14 @@ async function list(req, res, next) {
   // Prevent timezone conversion and format date into yyyy-mm-dd string
   data.map((entry) => {
     const returnDate = entry.reservation_date;
-    const dateArr = returnDate.toLocaleDateString().split("/");
+    const dateArr = returnDate
+      .toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+      .split("/");
+
     entry.reservation_date = `${dateArr[2]}-${dateArr[0]}-${dateArr[1]}`;
   });
   res.json({ data });

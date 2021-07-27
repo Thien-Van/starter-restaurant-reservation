@@ -16,24 +16,26 @@ import { formatAsDate, next, previous, today } from "../utils/date-time";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [currentDate, setCurrentDate] = useState(null);
-  const testdate = formatAsDate("2020-12-30");
+  const [currentDate, setCurrentDate] = useState(date);
+  // const testdate = formatAsDate("2021-07-28");
+  // const testdate = formatAsDate(date);
 
   /**
    * Switch back to actual date later
    */
 
-  useEffect(() => setCurrentDate(testdate), [testdate]);
-  // useEffect(() => setReservations(data), [currentDate]);
+  // useEffect(() => setCurrentDate(testdate), [testdate]);
+  // useEffect(() => setReservations(currentDate), [currentDate]);
   console.log("top", currentDate);
 
-  useEffect(loadDashboard, [currentDate, testdate]);
+  useEffect(loadDashboard, [currentDate]);
 
   // calls listReservations from utils/api with date as param
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     if (currentDate) {
+      console.log("current", currentDate);
       listReservations({ currentDate }, abortController.signal)
         .then(setReservations)
         .catch(setReservationsError);
@@ -68,7 +70,8 @@ function Dashboard({ date }) {
       people={res.people}
       date={res.reservation_date}
       time={res.reservation_time}
-      key={res.updated_at + index}
+      id={res.reservation_id}
+      key={res.reservation_id}
     />
   ));
 

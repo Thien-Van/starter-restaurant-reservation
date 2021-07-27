@@ -17,10 +17,11 @@ async function list(req, res, next) {
   res.json({ data });
 }
 
+//write middleware to validate body
 async function create(req, res, next) {
-  const body = req.body;
-  console.log(body);
-  // service.create(body);
+  const { data } = req.body;
+  const newData = await service.create(data);
+  res.status(201).json({ newData });
 }
 
 module.exports = {

@@ -58,8 +58,6 @@ async function fetchJson(url, options, onCancel) {
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
 
-// should return the reservations for specific param(date)
-// still needs the param from the route somehow
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   try {
@@ -70,8 +68,17 @@ export async function listReservations(params, signal) {
     console.log(error, params);
   }
   return await fetchJson(url, { headers, signal }, [])
-    // .then(console.log)
     .then(formatReservationDate)
     .then(formatReservationTime);
-  // .then(console.log);
+}
+
+export async function createReservation(reservation, signal) {
+  const url = `${API_BASE_URL}/reservations/new`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+  return await fetchJson(url, options);
 }

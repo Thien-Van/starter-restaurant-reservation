@@ -32,10 +32,11 @@ function ReservationForm({
   useEffect(() => {
     const resDate = reservation.reservation_date;
     if (resDate !== "") {
-      // if (resDate.getDay() === 2) {
-      //   const err = new Error("The restaurant is closed on Tuedays.");
-      //   setError(err);
-      // }
+      const formattedDate = new Date(resDate);
+      if (formattedDate.getDay() === 2) {
+        const err = new Error("The restaurant is closed on Tuedays.");
+        errorHandler(err);
+      }
       if (resDate < today()) {
         const err = new Error("Can't select a date in the past.");
         errorHandler(err);

@@ -23,11 +23,19 @@ function ReservationCreate() {
     history.goBack();
   }
 
+  function errorHandler(error) {
+    console.log(error);
+  }
+
   return (
     <div>
       <h1>Create Reservation</h1>
       <ErrorAlert error={error} />
-      <ReservationForm onSubmit={submitHandler} onCancel={cancelHandler} />
+      <ReservationForm
+        onSubmit={submitHandler}
+        onCancel={cancelHandler}
+        errorHandler={errorHandler}
+      />
     </div>
   );
 }

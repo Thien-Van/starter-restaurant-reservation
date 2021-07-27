@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { today } from "../utils/date-time";
 
 function ReservationForm({
+  errorHandler,
   onSubmit,
   onCancel,
   initialState = {
@@ -26,6 +28,33 @@ function ReservationForm({
       [name]: value,
     }));
   }
+
+  useEffect(() => {
+    const resDate = reservation.reservation_date;
+    if (resDate !== "") {
+      // if (resDate.getDay() === 2) {
+      //   const err = new Error("The restaurant is closed on Tuedays.");
+      //   setError(err);
+      // }
+      if (resDate < today()) {
+        const err = new Error("Can't select a date in the past.");
+        errorHandler(err);
+      }
+      console.log(resDate, today());
+    }
+  }, [reservation.reservation_date, errorHandler]);
+
+  useEffect(() => {
+    const resTime = reservation.reservation_time;
+    if (resTime !== "") {
+      if (resTime < "10:30" || resTime > "21:30") {
+        const err = new Error(
+          "Please select a time during our opening hours from 10:30 to 21:30."
+        );
+        errorHandler(err);
+      }
+    }
+  }, [reservation.reservation_time, errorHandler]);
 
   return (
     <form onSubmit={submitHandler} className="row g-3">
@@ -84,6 +113,7 @@ function ReservationForm({
             type="date"
             className="form-control"
             id="reservation_date"
+            min={today()}
             required={true}
             value={reservation.reservationDate}
             onChange={changeHandler}
@@ -98,6 +128,8 @@ function ReservationForm({
             type="time"
             className="form-control"
             id="reservation_time"
+            min="10:30"
+            max="21:30"
             required={true}
             value={reservation.reservationTime}
             onChange={changeHandler}

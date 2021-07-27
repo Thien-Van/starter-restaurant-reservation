@@ -19,40 +19,28 @@ function Dashboard({ date }) {
   const [currentDate, setCurrentDate] = useState(null);
   const testdate = formatAsDate("2020-12-30");
 
+  /**
+   * Switch back to actual date later
+   */
+
   useEffect(() => setCurrentDate(testdate), [testdate]);
   // useEffect(() => setReservations(data), [currentDate]);
   console.log("top", currentDate);
 
   useEffect(loadDashboard, [currentDate, testdate]);
 
-  // new function to replicate loadDashboard with debug database
   // calls listReservations from utils/api with date as param
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     if (currentDate) {
-      console.log("ifCurrentDate");
       listReservations({ currentDate }, abortController.signal)
-        // .then(console.log)
         .then(setReservations)
         .catch(setReservationsError);
     }
     return () => abortController.abort();
   }
 
-  // replaced the return statement with one that works with the debug database
-  // return (
-  //   <main>
-  //     <h1>Dashboard</h1>
-  //     <div className="d-md-flex mb-3">
-  //       <h4 className="mb-0">Reservations for date</h4>
-  //     </div>
-  //     <ErrorAlert error={reservationsError} />
-  //     {JSON.stringify(reservations)}
-  //   </main>
-  // );
-
-  //need to setup a useEffect/useState for date
   //sets date to current date -1
   const handlePrev = (event) => {
     event.preventDefault();
@@ -60,11 +48,13 @@ function Dashboard({ date }) {
     setCurrentDate(previous(currentDate));
   };
 
+  //sets date to today
   const handleToday = (event) => {
     event.preventDefault();
     setCurrentDate(today());
   };
 
+  //sets date to current date +1
   const handleNext = (event) => {
     event.preventDefault();
     setCurrentDate(next(currentDate));
@@ -94,16 +84,16 @@ function Dashboard({ date }) {
         <button
           type="button"
           className="btn btn-secondary col-2"
-          onClick={handlePrev}
+          onClick={handleToday}
         >
-          Previous
+          Today
         </button>
         <button
           type="button"
           className="btn btn-secondary col-2"
-          onClick={handleToday}
+          onClick={handlePrev}
         >
-          Today
+          Previous
         </button>
         <button
           type="button"

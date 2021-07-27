@@ -1,9 +1,35 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
 
-/**
- * List handler for reservation resources
- */
+// Function to validate time and date of the reservation to create
+function validateBody(req, res, next) {
+  const { data } = req.body;
+  const today = new Date();
+  const resDate = new Date(data.reservation_date);
+  const resTime = data.reservation_time;
+  if (resDate < today) {
+    return next({
+      status: 400,
+      message: "Unable to select a date in the past.",
+    });
+  } else if (resDate.getDay() === 2) {
+    return next({
+      status: 400,
+      message: "The restaurant is closed on Tuedays.",
+    });
+  } else if (resTime < "09:30" || resTime > "21:30") {
+    return next({
+      status: 400,
+      message:
+        "Please select a time during our opening hours from 10:30 to 21:30.",
+    });
+  } else {
+    res.locals.reservation = { data };
+    return next();
+  }
+}
+
+// List handler for reservation resources
 async function list(req, res, next) {
   const date = req.query.currentDate;
   const data = await service.list(date);
@@ -17,14 +43,13 @@ async function list(req, res, next) {
   res.json({ data });
 }
 
-//write middleware to validate body
 async function create(req, res, next) {
-  const { data } = req.body;
+  const { data } = res.locals.reservation;
   const newData = await service.create(data);
   res.status(201).json({ newData });
 }
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: asyncErrorBoundary(create),
+  create: [validateBody, asyncErrorBoundary(create)],
 };

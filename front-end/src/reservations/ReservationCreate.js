@@ -13,6 +13,7 @@ function ReservationCreate() {
     const abortController = new AbortController();
     createReservation(reservation, abortController.signal)
       .then(() =>
+        // find way to set correct date on dashboard
         history.push(`/dashboard/?date=${reservation.reservation_date}`)
       )
       .catch(setError);
